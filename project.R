@@ -69,38 +69,51 @@ if(ratio > 2){
 CSK<-as.character(x[1,3])
 DI<-as.character(x[2,3])
 
-DI
+
 
 if(CSK == 'K' && n1 > 10 && n2 >10){
-	print("Two Proportion Z Test")
+	xSuccess<-0
+	ySuccess<-0
+	for(i in 1:length(x1)){
+		if(x1[i] == 1){
+			xSuccess=xSuccess + 1
+		}
+	}
+	for(i in 1:length(y1)){
+		if(y1[i] == 1){
+			ySuccess=ySuccess + 1
+		}
+	}
+	p1<-xSuccess/n1
+	p2<-ySuccess/n2
+	p<-(xSuccess+ySuccess)/(n1+n2)
+	z<-(((p1-p2)-0)/sqrt(p*(1-p)*((1/n1)+(1/n2))))
+	z
+	pnorm(z)
 }
 
 if((CSK == 'S') && (normalX >0.05) && (normalY >0.05)){
-	print("F Test")
+	var.test(x,y,alternative = "greater")
 }
 
 if(CSK == 'C'){
 	if(DI == 'I'){
 		if((equalVar == true) && (normalX >0.05) && (normalY >0.05)){
 			print("pooled two sample")
-		}
-		else if((normalX >0.05) && (normalY >0.05)){
+		}else if((normalX >0.05) && (normalY >0.05)){
 			print("2 sample t test")
-		}
-		else{
+		}else{
 			print("abort")
 		}
 	}
 	else if((DI == 'D') && (n1==n2)){
-		if(signTNormal){
+		if(signTNormal > 0.05){
 			print("paired t")
-		}
-		else{
+		}else{
 			print("sign")
 		}
 	}
-}
-else{
+}else{
 	print("abort")
 }
 

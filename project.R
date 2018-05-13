@@ -92,32 +92,58 @@ if(CSK == 'K' && n1 > 10 && n2 >10){
 	z
 	pnorm(z)
 	print("Proportions test")
+}else{
+	if(CSK == 'K'){
+	print("The two-proportion test could not be run because n1 or n2 is less than 10")
+	}else{
+	print("The two-proportion test could not be run because the value of CSK was not equal to K, meaning our data is not a count of successes and failures")
+	}
 }
 
 if((CSK == 'S') && (normalX >0.05) && (normalY >0.05)){
 	#The F Test
 	var.test(x1,y1,alternative = "two.sided")
+}else{
+	if(CSK == 'S'){
+	print("The F test could not be run because the x and y values are not normal")
+	}else{
+	print("The F test could not be run because the CSK value is not 'S', meaning our data is not spread")
+	}
 }
 
 if(CSK == 'C'){
-
 	if(DI == 'I'){
-		if((equalVar == true) && (normalX >0.05) && (normalY >0.05)){
+		if((equalVar == TRUE) && (normalX >0.05) && (normalY >0.05)){
+			print("We can preform the pooled two sample t test because we have approximately equal variance and our data is approximately normal")
 			t.test(x1,y1,alternative = "two.sided", var.equal = TRUE,conf.level = 0.95)
-			print("pooled two sample")
 		}else if((normalX >0.05) && (normalY >0.05)){
-			t.test(x1,y1,alternative = "two.sided", var.equal = FALSE,conf.level = 0.95)
-			print("2 sample t test")
+			print("We cannot perform  the pooled two-sample t test because our variance is not approximately equal")
+		      print("We can perform the two-sample t test because even though our variance is not approximately equal,our data is approximately normal")
+			p<-t.test(x1,y1,alternative = "two.sided", var.equal = FALSE,conf.level = 0.95)[3]
+			if(p>=0.05){
+				print(paste0("Fail to reject Ho: p=", p))
+			}else{
+				print(paste0("Reject Ho: p=", p))
+			}
 		}else{
-			print("abort")
+			print("Even though our data is Centerd and Independed, we can not preform either two sample t test because our data is not approximately normal")
 		}
+	}else{
+		print("We cannot perform the pooled two-sample t test or the two-sample t test because our data is not independent")
 	}
 
-	else if((DI == 'D') && (n1==n2)){
+	if((DI == 'D') && (n1==n2)){
 		if(signTNormal > 0.05){
-			t.test(x1,y1,alternative = "two.sided", paired = TRUE, conf.level = 0.95)
-			print("paired t")
+			print("Since our data is paired, Depended and our signTNormal, which was generated from the shapiro test is greater than 0.05 we can use the paired t test")
+			p<-t.test(x1,y1,alternative = "two.sided", paired = TRUE, conf.level = 0.95)[3]
+			if(p>=0.05){
+				print(paste0("Fail to reject Ho: p=", p))
+			}else{
+				print(paste0("Reject Ho: p=", p))
+			}
 		}else{
+			print("We can not use the paired t test because our signTNormal, gathered from the shapiro test, is less than 0.05")
+			print("Since our data is dependet and the size of x and y are equal we can use the Sign test")
 			##Sign test, first we initlize an empty array called d
 			d<-list()
 			for(i in 1:length(x1)){
@@ -133,12 +159,13 @@ if(CSK == 'C'){
 			d
 			print("sign")
 		}
-	}else{
-	print("abort")
 	}
+}else{
+	print("None of the tests,pooled two sample test, two sample t test, paired t or sign test could be run because CSK was not equal to C")
 }
 
 
 
 
+ 
 

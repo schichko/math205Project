@@ -72,6 +72,7 @@ DI<-as.character(x[2,3])
 
 
 if(CSK == 'K' && n1 > 10 && n2 >10){
+	#The Two Proportion test
 	xSuccess<-0
 	ySuccess<-0
 	for(i in 1:length(x1)){
@@ -90,31 +91,51 @@ if(CSK == 'K' && n1 > 10 && n2 >10){
 	z<-(((p1-p2)-0)/sqrt(p*(1-p)*((1/n1)+(1/n2))))
 	z
 	pnorm(z)
+	print("Proportions test")
 }
 
 if((CSK == 'S') && (normalX >0.05) && (normalY >0.05)){
-	var.test(x,y,alternative = "greater")
+	#The F Test
+	var.test(x1,y1,alternative = "two.sided")
 }
 
 if(CSK == 'C'){
+
 	if(DI == 'I'){
 		if((equalVar == true) && (normalX >0.05) && (normalY >0.05)){
+			t.test(x1,y1,alternative = "two.sided", var.equal = TRUE,conf.level = 0.95)
 			print("pooled two sample")
 		}else if((normalX >0.05) && (normalY >0.05)){
+			t.test(x1,y1,alternative = "two.sided", var.equal = FALSE,conf.level = 0.95)
 			print("2 sample t test")
 		}else{
 			print("abort")
 		}
 	}
+
 	else if((DI == 'D') && (n1==n2)){
 		if(signTNormal > 0.05){
+			t.test(x1,y1,alternative = "two.sided", paired = TRUE, conf.level = 0.95)
 			print("paired t")
 		}else{
+			##Sign test, first we initlize an empty array called d
+			d<-list()
+			for(i in 1:length(x1)){
+			#Then we go through the x1 and y1 and subtract them from eachother
+				if(x1[i] - y1[i] == 0){
+				#We ignore if the difference is 0
+				}
+				else{
+					#if the difference is not 0 we store it in d[i]
+					d[i]<-x1[i] - y1[i]
+				}
+			}
+			d
 			print("sign")
 		}
-	}
-}else{
+	}else{
 	print("abort")
+	}
 }
 
 

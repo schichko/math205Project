@@ -162,16 +162,17 @@ if(CSK == 'C'){
 			d<-list()
 			for(i in 1:length(x1)){
 			#Then we go through the x1 and y1 and subtract them from eachother
-				if(x1[i] - y1[i] == 0){
-				#We ignore if the difference is 0
-				}
-				else{
-					#if the difference is not 0 we store it in d[i]
-					d[i]<-x1[i] - y1[i]
+				if(x1[i] - y1[i] != 0){
+				  d[i]<-x1[i] - y1[i]
 				}
 			}
-			d
-			print("sign")
+			print("sign test")
+			SignTest(d)
+			if(d < .05){
+			  print("P is less than .05, so we are able to reject the null hypothesis")
+			}else{
+			  print("P is greater than .05, so we are unable to reject the null") 
+			}
 		}
 	}
 }else{

@@ -166,8 +166,10 @@ if(CSK == 'C'){
 				  d[i]<-x1[i] - y1[i]
 				}
 			}
-			print("sign test")
-			SignTest(d)
+			
+			if(!require(DescTools)){install.packages("DescTools")}
+			library(DescTools)
+			SignTest(x1,y1)
 			if(d < .05){
 			  print("P is less than .05, so we are able to reject the null hypothesis")
 			}else{
